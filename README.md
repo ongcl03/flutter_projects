@@ -1,4 +1,4 @@
-# flutter_projects
+# SIMPLE NBA API APP
 
 Just a simple UI page using NBA API
 
