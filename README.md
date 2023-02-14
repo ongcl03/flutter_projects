@@ -3,5 +3,6 @@
 A new collection of Flutter project.
 
 ## Project preview
-![](preview_image/home_screen.png)
-![](preview_image/details_screen.png)
+<img src="preview_image/home_screen.png" width=300>
+<img src="preview_image/details_screen.png" width=300>
+
