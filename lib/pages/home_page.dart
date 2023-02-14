@@ -3,6 +3,7 @@ import 'package:flutter_projects/constants/constants.dart';
 import 'package:flutter_projects/pages/components/app_bar_title.dart';
 import 'package:flutter_projects/pages/components/categories.dart';
 import 'package:flutter_projects/pages/components/Bottom%20Navigation%20Bar/my_bottom_navigation_bar.dart';
+import 'package:flutter_projects/pages/components/gridview_posts.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,11 +16,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: buildAppBar(),
       body: Column(
-        children: [Categories()],
+        children: [
+          Categories(),
+          const GridViewPosts(),
+        ],
       ),
-      bottomNavigationBar: MyBottomNavigationBar(),
+      bottomNavigationBar: const MyBottomNavigationBar(),
     );
   }
 
@@ -65,5 +70,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
 
