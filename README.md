@@ -1,4 +1,4 @@
-# SIMPLE NBA API APP
+# Simple NBA Api App
 
 Just a simple UI page using NBA API
 
