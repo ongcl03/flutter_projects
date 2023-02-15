@@ -50,34 +50,46 @@ class GridViewPosts extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                CircleAvatar(
-                                  backgroundImage: NetworkImage(postList[index].profileImage),
-                                  maxRadius: 9.5,
-                                ),
-                                const SizedBox(width: 10,),
-                                Text(
-                                  postList[index].author,
-                                  style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Color(0xFF636363)
+                            SizedBox(
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundImage: NetworkImage(postList[index].profileImage),
+                                    maxRadius: 9.5,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(width: 10,),
+                                  Text(
+                                    postList[index].author,
+                                    style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Color(0xFF636363)
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  height: 40,
-                                  child: Image.asset("assets/icons/heart.png", color: const Color(0xFF636363),),
+                            Flexible(
+                              child: SizedBox(
+                                width: 80,
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      height: 40,
+                                      child: Image.asset("assets/icons/heart.png", color: const Color(0xFF636363),),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines : 1,
+                                        postList[index].likeNumber, style: const TextStyle(
+                                          fontSize: 13.7,
+                                          color: Color(0xFF636363)
+                                      ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(postList[index].likeNumber, style: const TextStyle(
-                                    fontSize: 13.7,
-                                    color: Color(0xFF636363)
-                                ),
-                                ),
-                              ],
+                              ),
                             )
                           ],
                         ),
