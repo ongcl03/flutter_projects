@@ -15,6 +15,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: "Flutter News App Ui",
+      theme: ThemeData(
+        primarySwatch: Colors.grey
+      ),
       initialRoute: '/',
       routes: {
         HomePage.routeName : (context) => const HomePage(),
