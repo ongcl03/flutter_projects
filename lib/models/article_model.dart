@@ -44,7 +44,7 @@ class Article extends Equatable{
       authorImageUrl:
       'https://images.unsplash.com/photo-1658786403875-ef4086b78196?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80',
       category: 'Politics',
-      views: 1204,
+      views: 100,
       imageUrl:
       'https://images.unsplash.com/photo-1574280363402-2f672940b871?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
       createdAt: DateTime.now().subtract(const Duration(hours: 6)),
@@ -61,7 +61,7 @@ class Article extends Equatable{
       authorImageUrl:
       'https://images.unsplash.com/photo-1658786403875-ef4086b78196?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80',
       category: 'Politics',
-      views: 1204,
+      views: 305,
       imageUrl:
       'https://images.unsplash.com/photo-1616832880334-b1004d9808da?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1336&q=80',
       createdAt: DateTime.now().subtract(const Duration(hours: 8)),
@@ -77,7 +77,7 @@ class Article extends Equatable{
       authorImageUrl:
       'https://images.unsplash.com/photo-1658786403875-ef4086b78196?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80',
       category: 'Politics',
-      views: 1204,
+      views: 201,
       imageUrl:
       'https://images.unsplash.com/photo-1653587416464-8a99cc74d192?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=974&q=80',
       createdAt: DateTime.now().subtract(const Duration(hours: 19)),
@@ -94,7 +94,7 @@ class Article extends Equatable{
       authorImageUrl:
       'https://images.unsplash.com/photo-1658786403875-ef4086b78196?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80',
       category: 'Politics',
-      views: 1204,
+      views: 809,
       imageUrl:
       'https://images.unsplash.com/photo-1658330056737-0fd4bda0e4c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1351&q=80',
       createdAt: DateTime.now().subtract(const Duration(hours: 20)),
