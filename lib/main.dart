@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/pages/article_page.dart';
+import 'package:flutter_projects/pages/discover_page.dart';
 import 'package:flutter_projects/pages/home_page.dart';
 
 void main() {
@@ -11,9 +13,30 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage()
+      initialRoute: '/',
+      routes: {
+        HomePage.routeName : (context) => const HomePage(),
+        DiscoverPage.routeName : (context) => const DiscoverPage(),
+        ArticlePage.routeName : (context) => const ArticlePage()
+      },
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
