@@ -1,6 +1,9 @@
 import 'dart:ffi';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/components/search_bar.dart';
+import 'package:flutter_projects/components/song_tab_bar.dart';
 import 'package:flutter_projects/components/song_tile.dart';
 import 'package:flutter_projects/constants/constant.dart';
 import 'package:flutter_projects/models/song.dart';
@@ -18,7 +21,75 @@ class _HomePageState extends State<HomePage> {
   final List<String> tabs = ["English songs", "Chinese songs"];
 
   // No song at start
-  Song currentSong = Song(songName: "", artist: "", songUrl: "", imageUrl: "");
+  Song currentSong = Song(songName: "Choose your song", artist: "My Playlist", songUrl: "", imageUrl: "https://png.pngtree.com/element_our/png/20181022/music-and-live-music-logo-with-neon-light-effect-vector-png_199406.jpg");
+
+  // Audio Player
+  AudioPlayer player = AudioPlayer();
+  bool isPlaying = false;
+
+
+  // Future initPlayer() async{
+  //   for (Song song in songList){
+  //     await player.setSourceUrl(song.songUrl);
+  //   }
+  // }
+  //
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   initPlayer();
+  // }
+
+
+
+  // Song duration
+  Duration duration = const Duration();
+  Duration position = const Duration();
+
+
+  Future playMusic(String songUrl) async{
+
+    // A song is playing but new song is selected
+    if(isPlaying && currentSong.songUrl != songUrl){
+      player.pause();
+      await player.play(UrlSource(songUrl));
+      isPlaying = true;
+    }
+
+    else if(isPlaying && currentSong.songUrl == songUrl){
+      await player.stop();
+      await player.play(UrlSource(songUrl));
+    }
+
+    else{
+      setState(() {
+        isPlaying = true;
+      });
+      await player.play(UrlSource(songUrl));
+    }
+
+    // Use these two method below to build the progress bar of song
+
+    // This event returns the duration of the file, when it's available (it might take a while because it's being downloaded or buffered).
+    // So here we have the total length of the song
+    player.onDurationChanged.listen((event) {
+      setState(() {
+        duration = event;
+      });
+    });
+
+    // This Event updates the current position of the audio. You can use it to make a progress bar
+    // So here we have the current position of the song
+    player.onPositionChanged.listen((event) {
+      setState(() {
+        position = event;
+      });
+    });
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,23 +97,7 @@ class _HomePageState extends State<HomePage> {
       initialIndex: 0,
       length: tabs.length,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: const Icon(
-            Icons.menu,
-            color: Colors.black,
-          ),
-          actions: const [
-            Padding(
-              padding: EdgeInsets.only(right: 15),
-              child: Icon(
-                Icons.person,
-                color: Colors.black,
-              ),
-            )
-          ],
-        ),
+        appBar: buildAppBar(),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -71,71 +126,17 @@ class _HomePageState extends State<HomePage> {
             ),
 
             // Search bar
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                  decoration: InputDecoration(
-                      hintText: "Search",
-                      prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                      filled: true,
-                      fillColor: Colors.grey.shade200,
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(15)))),
-            ),
+            const SearchBar(),
 
             const SizedBox(
               height: 25,
             ),
 
             // Tab Bar
-            TabBar(
-              indicatorColor: Colors.black38,
-              tabs: tabs
-                  .map(
-                    (tab) => Tab(
-                        child: Text(
-                      tab,
-                      style: GoogleFonts.montserrat(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600
-                      )
-                    )),
-                  )
-                  .toList(),
-            ),
+            SongTabBar(tabs: tabs),
 
             // Tab Bar View
-            Expanded(
-              child: TabBarView(
-                children: [
-
-                  // English song list view
-                 ListView.builder(
-                   itemCount: songList.length,
-                   itemBuilder: (context, index){
-                     return SongTile(song: songList[index],
-                       onTap: (){
-                         setState(() {
-                           currentSong = songList[index];
-                         });
-                       }
-                     );
-                   },
-                 ),
-
-
-                  // Chinese song list view
-                  ListView(
-                    children: [
-
-                    ],
-                  ),
-
-                ],
-              ),
-            ),
+            buildTabBarView(),
 
             // Bottom player
             Container(
@@ -150,10 +151,19 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   // Slider
                   Slider.adaptive(
-                      value: 0.0,
-                      onChanged: (value){},
+                      value: position.inSeconds.toDouble(),
+                      min: 0.0,
+                      max: duration.inSeconds.toDouble(),
+                      onChanged: (newValue) async{
+                        setState(() {
+                          position = Duration(seconds: newValue.toInt());
+                        });
+                        await player.seek(Duration(seconds: newValue.toInt()));
+                      },
                       inactiveColor: Colors.grey,
                       thumbColor: Colors.brown[900],
+                      activeColor: Colors.brown[900],
+
                   ),
 
                   // Player
@@ -194,8 +204,21 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: const EdgeInsets.only(left: 8, top: 8, bottom: 8, right: 20),
                         child: IconButton(
-                            onPressed: (){},
-                            icon: const Icon(Icons.play_arrow, size: 40,)
+                            onPressed: (){
+                              if(isPlaying){
+                                player.pause();
+                                setState(() {
+                                  isPlaying = false;
+                                });
+                              }
+                              else{
+                                player.resume();
+                                setState(() {
+                                  isPlaying = true;
+                                });
+                              }
+                            },
+                            icon: isPlaying ? const Icon(Icons.pause, size: 40, color: Colors.black,) : const Icon(Icons.play_arrow, size: 40, color: Colors.black,)
                         ),
                       )
                     ],
@@ -207,6 +230,66 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Expanded buildTabBarView() {
+    return Expanded(
+            child: TabBarView(
+              children: [
+
+                // English song list view
+               ListView.builder(
+                 itemCount: songList.length,
+                 itemBuilder: (context, index){
+                   return SongTile(song: songList[index],
+                     onTap: (){
+                       setState(() {
+                         currentSong = songList[index];
+                       });
+                       playMusic(currentSong.songUrl);
+                     }
+                   );
+                 },
+               ),
+
+
+                // Chinese song list view
+                ListView.builder(
+                  itemCount: songList.length,
+                  itemBuilder: (context, index){
+                    return SongTile(song: songList[index],
+                        onTap: (){
+                          setState(() {
+                            currentSong = songList[index];
+                          });
+                        }
+                    );
+                  },
+                ),
+
+              ],
+            ),
+          );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: const Icon(
+          Icons.menu,
+          color: Colors.black,
+        ),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 15),
+            child: Icon(
+              Icons.person,
+              color: Colors.black,
+            ),
+          )
+        ],
+      );
   }
 
   BottomNavigationBar buildBottomNavigationBar() {
@@ -227,3 +310,6 @@ class _HomePageState extends State<HomePage> {
       );
   }
 }
+
+
+
