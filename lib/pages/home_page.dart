@@ -35,7 +35,8 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         ),
-        body: ListView(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(
               height: 10,
@@ -95,9 +96,17 @@ class _HomePageState extends State<HomePage> {
                     )),
                   )
                   .toList(),
-            )
+            ),
 
             // Tab Bar View
+            const Expanded(
+              child: TabBarView(
+                children: [
+                  Text("hi"),
+                  Text("hello")
+                ],
+              ),
+            )
           ],
         ),
       ),
