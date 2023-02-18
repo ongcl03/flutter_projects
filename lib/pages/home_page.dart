@@ -1,6 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_projects/components/search_bar.dart';
 import 'package:flutter_projects/components/song_tab_bar.dart';
 import 'package:flutter_projects/components/song_tile.dart';
 import 'package:flutter_projects/constants/constant.dart';
@@ -19,6 +18,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List<String> tabs = ["English songs", "Chinese songs"];
 
+
+  // This list holds the data for the list view
+  List<Song> _foundEnglishSongs = [];
+  List<Song> _foundChineseSongs = [];
+
+
   // In order to use Future builder, we need to declare a late Future variable and this will be initialise inside the initState()
   late Future dataFuture;
 
@@ -30,6 +35,10 @@ class _HomePageState extends State<HomePage> {
 
     // Initialise the Future Object we declare to some Future method, so we can use in our FutureBuilder(future: )
     dataFuture = getAllSongs();
+
+    // Set the found song list as the original data song list
+    _foundEnglishSongs = englishSongList;
+    _foundChineseSongs = chineseSongList;
   }
 
   // Read data from firestore and get all the songs when the app start and to build the listview
@@ -38,6 +47,46 @@ class _HomePageState extends State<HomePage> {
     await ReadData.getChineseSong();
   }
 
+
+  // This function is called whenever the text field changes
+  void runEnglishSongFilter(String enteredKeyword) {
+    List<Song> results = [];
+    if (enteredKeyword.isEmpty) {
+      // if the search field is empty or only contains white-space, we'll display all songs
+      results = englishSongList;
+    } else {
+      results = englishSongList
+          .where((song) =>
+          song.songName.toLowerCase().contains(enteredKeyword.toLowerCase()))
+          .toList();
+      // we use the toLowerCase() method to make it case-insensitive
+    }
+
+    // Set the found song to result
+    setState(() {
+      _foundEnglishSongs = results;
+    });
+  }
+
+  // This function is called whenever the text field changes
+  void runChineseSongFilter(String enteredKeyword) {
+    List<Song> results = [];
+    if (enteredKeyword.isEmpty) {
+      // if the search field is empty or only contains white-space, we'll display all songs
+      results = chineseSongList;
+    } else {
+      results = chineseSongList
+          .where((song) =>
+          song.songName.toLowerCase().contains(enteredKeyword.toLowerCase()))
+          .toList();
+      // we use the toLowerCase() method to make it case-insensitive
+    }
+
+    // Set the found song to result
+    setState(() {
+      _foundChineseSongs = results;
+    });
+  }
 
 
   // No song at start
@@ -130,7 +179,23 @@ class _HomePageState extends State<HomePage> {
             ),
 
             // Search bar
-            const SearchBar(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: TextField(
+                  onChanged: (value) {
+                    // Run the filter so search song
+                    runEnglishSongFilter(value);
+                    runChineseSongFilter(value);
+                  },
+                  decoration: InputDecoration(
+                      hintText: "Search",
+                      prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.grey.shade200,
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(15)))),
+            ),
 
             const SizedBox(
               height: 25,
@@ -248,12 +313,12 @@ class _HomePageState extends State<HomePage> {
                  builder: (context, snapshot){
                    if(snapshot.connectionState == ConnectionState.done){
                      return ListView.builder(
-                       itemCount: englishSongList.length,
+                       itemCount: _foundEnglishSongs.length,                    // set to _foundEnglishSongs to indicate the found song result (by default it is same as the englishSongList in the beginning, when no search)
                        itemBuilder: (context, index){
-                         return SongTile(song: englishSongList[index],
+                         return SongTile(song: _foundEnglishSongs[index],
                              onTap: (){
                                setState(() {
-                                 currentSong = englishSongList[index];
+                                 currentSong = _foundEnglishSongs[index];
                                });
                                playMusic(currentSong.songUrl);
                              }
@@ -279,12 +344,12 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, snapshot) {
                     if(snapshot.connectionState == ConnectionState.done) {
                       return ListView.builder(
-                        itemCount: chineseSongList.length,
+                        itemCount: _foundChineseSongs.length,                       // set to _foundChineseSongs to indicate the found song result (by default it is same as the chineseSongList in the beginning, when no search)
                         itemBuilder: (context, index) {
-                          return SongTile(song: chineseSongList[index],
+                          return SongTile(song: _foundChineseSongs[index],
                               onTap: () {
                                 setState(() {
-                                  currentSong = chineseSongList[index];
+                                  currentSong = _foundChineseSongs[index];
                                 });
                                 playMusic(currentSong.songUrl);
                               }

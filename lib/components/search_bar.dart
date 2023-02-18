@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+
+// THIS CLASS HAS NOT BEEN USED ANYMORE
+
 class SearchBar extends StatelessWidget {
   const SearchBar({
     Key? key,
