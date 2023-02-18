@@ -19,13 +19,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List<String> tabs = ["English songs", "Chinese songs"];
 
-  // No song at start
-  Song currentSong = Song(songName: "Choose your song", artist: "My Playlist", songUrl: "", imageUrl: "https://png.pngtree.com/element_our/png/20181022/music-and-live-music-logo-with-neon-light-effect-vector-png_199406.jpg");
-
-  // Audio Player
-  AudioPlayer player = AudioPlayer();
-  bool isPlaying = false;
-
+  // In order to use Future builder, we need to declare a late Future variable and this will be initialise inside the initState()
+  late Future dataFuture;
 
 
   @override
@@ -33,16 +28,24 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
 
-    getAllSongs();
+    // Initialise the Future Object we declare to some Future method, so we can use in our FutureBuilder(future: )
+    dataFuture = getAllSongs();
   }
 
   // Read data from firestore and get all the songs when the app start and to build the listview
   Future getAllSongs() async{
-    final ReadData readData = ReadData();
-    await readData.getEnglishSong();
-    await readData.getChineseSong();
+    await ReadData.getEnglishSong();
+    await ReadData.getChineseSong();
   }
 
+
+
+  // No song at start
+  Song currentSong = Song(songName: "Choose your song", artist: "My Playlist", songUrl: "", imageUrl: "https://png.pngtree.com/element_our/png/20181022/music-and-live-music-logo-with-neon-light-effect-vector-png_199406.jpg");
+
+  // Audio Player
+  AudioPlayer player = AudioPlayer();
+  bool isPlaying = false;
 
   // Song duration
   Duration duration = const Duration();
@@ -239,36 +242,65 @@ class _HomePageState extends State<HomePage> {
               children: [
 
                 // English song list view
-               ListView.builder(
-                 itemCount: englishSongList.length,
-                 itemBuilder: (context, index){
-                   return SongTile(song: englishSongList[index],
-                     onTap: (){
-                       setState(() {
-                         currentSong = englishSongList[index];
-                       });
-                       playMusic(currentSong.songUrl);
-                     }
-                   );
-                 },
+                // Use FutureBuilder for one time building, while StreamBuilder many time
+               FutureBuilder(
+                 future: dataFuture,            // Use the late Future Object we declare ,DO NOT USE the getALlSong() method, because it will be called several times once the builder build (so it will make many repeated song tiles and we don't want that)
+                 builder: (context, snapshot){
+                   if(snapshot.connectionState == ConnectionState.done){
+                     return ListView.builder(
+                       itemCount: englishSongList.length,
+                       itemBuilder: (context, index){
+                         return SongTile(song: englishSongList[index],
+                             onTap: (){
+                               setState(() {
+                                 currentSong = englishSongList[index];
+                               });
+                               playMusic(currentSong.songUrl);
+                             }
+                         );
+                       },
+                     );
+                   }
+                   else {
+                     return Center(
+                         child: CircularProgressIndicator(
+                           valueColor: AlwaysStoppedAnimation<Color>(Colors.brown[700]!),
+                         )
+                     );
+                   }
+                 }
                ),
 
 
                 // Chinese song list view
-                ListView.builder(
-                  itemCount: chineseSongList.length,
-                  itemBuilder: (context, index){
-                    return SongTile(song: chineseSongList[index],
-                        onTap: (){
-                          setState(() {
-                            currentSong = chineseSongList[index];
-                          });
-                          playMusic(currentSong.songUrl);
-                        }
-                    );
-                  },
+                // Use FutureBuilder for one time building, while StreamBuilder many time
+                FutureBuilder(
+                  future: dataFuture,         // Use the late Future Object we declare ,DO NOT USE the getALlSong() method, because it will be called several times once the builder build (so it will make many repeated song tiles and we don't want that)
+                  builder: (context, snapshot) {
+                    if(snapshot.connectionState == ConnectionState.done) {
+                      return ListView.builder(
+                        itemCount: chineseSongList.length,
+                        itemBuilder: (context, index) {
+                          return SongTile(song: chineseSongList[index],
+                              onTap: () {
+                                setState(() {
+                                  currentSong = chineseSongList[index];
+                                });
+                                playMusic(currentSong.songUrl);
+                              }
+                          );
+                        },
+                      );
+                    }
+                    else {
+                      return Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.brown[700]!),
+                          )
+                      );
+                    }
+                  }
                 ),
-
               ],
             ),
           );

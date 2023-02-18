@@ -11,7 +11,7 @@ List<Song> chineseSongList = [];
 class ReadData {
 
   // Get all the documents (english songs) inside the English Songs collection and add to the chinese song list
-  Future getEnglishSong() async{
+  static Future getEnglishSong() async{
     await FirebaseFirestore.instance.collection("English Songs").get().then((value) {
       for(var songFields in value.docs) {
 
@@ -30,7 +30,7 @@ class ReadData {
 
 
   // Get all the documents (chinese songs) inside the Chinese Songs collection and add to the chinese song list
-  Future getChineseSong() async{
+  static Future getChineseSong() async{
     await FirebaseFirestore.instance.collection("Chinese Songs").get().then((value) {
       for(var songFields in value.docs) {
 
