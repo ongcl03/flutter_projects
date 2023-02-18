@@ -2,15 +2,12 @@
 
 A new collection of Flutter project.
 
-## Getting Started
+## Project Preview
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Notes to take care about
+The backend logic :
+- All songs are stored in firebase cloud storage
+- The songs are manually uploaded to the cloud storage and the song's url need to be manually added to the firestore 'songUrl' field
+- The app then retrieves the songs by getting the data (songName, artist, songUrl, imageUrl) from firebase firestore

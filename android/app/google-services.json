@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "643665166344",
+    "project_id": "reverb-music-streaming",
+    "storage_bucket": "reverb-music-streaming.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:643665166344:android:802f9eb6d60820f93d91bd",
+        "android_client_info": {
+          "package_name": "com.example.flutter_projects"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "643665166344-cmnj645o5l457vop6tt8fgfnrvk2vgqc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8-zm-TQk5YWxlzlj8P_ZfnJOPj-k5Z5s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "643665166344-cmnj645o5l457vop6tt8fgfnrvk2vgqc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

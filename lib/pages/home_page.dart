@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_projects/components/search_bar.dart';
@@ -7,8 +5,9 @@ import 'package:flutter_projects/components/song_tab_bar.dart';
 import 'package:flutter_projects/components/song_tile.dart';
 import 'package:flutter_projects/constants/constant.dart';
 import 'package:flutter_projects/models/song.dart';
+import 'package:flutter_projects/services/firestore/ReadData.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_projects/models/song.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -28,19 +27,21 @@ class _HomePageState extends State<HomePage> {
   bool isPlaying = false;
 
 
-  // Future initPlayer() async{
-  //   for (Song song in songList){
-  //     await player.setSourceUrl(song.songUrl);
-  //   }
-  // }
-  //
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   initPlayer();
-  // }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    getAllSongs();
+  }
+
+  // Read data from firestore and get all the songs when the app start and to build the listview
+  Future getAllSongs() async{
+    final ReadData readData = ReadData();
+    await readData.getEnglishSong();
+    await readData.getChineseSong();
+  }
 
 
   // Song duration
@@ -238,30 +239,36 @@ class _HomePageState extends State<HomePage> {
               children: [
 
                 // English song list view
-               ListView.builder(
-                 itemCount: songList.length,
-                 itemBuilder: (context, index){
-                   return SongTile(song: songList[index],
-                     onTap: (){
-                       setState(() {
-                         currentSong = songList[index];
-                       });
-                       playMusic(currentSong.songUrl);
-                     }
+               StreamBuilder<Object>(
+                 stream: null,
+                 builder: (context, snapshot) {
+                   return ListView.builder(
+                     itemCount: englishSongList.length,
+                     itemBuilder: (context, index){
+                       return SongTile(song: englishSongList[index],
+                         onTap: (){
+                           setState(() {
+                             currentSong = englishSongList[index];
+                           });
+                           playMusic(currentSong.songUrl);
+                         }
+                       );
+                     },
                    );
-                 },
+                 }
                ),
 
 
                 // Chinese song list view
                 ListView.builder(
-                  itemCount: songList.length,
+                  itemCount: chineseSongList.length,
                   itemBuilder: (context, index){
-                    return SongTile(song: songList[index],
+                    return SongTile(song: chineseSongList[index],
                         onTap: (){
                           setState(() {
-                            currentSong = songList[index];
+                            currentSong = chineseSongList[index];
                           });
+                          playMusic(currentSong.songUrl);
                         }
                     );
                   },

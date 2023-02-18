@@ -39,6 +39,8 @@ dependencies:
   math_expressions: ^2.3.1
   google_fonts: ^4.0.3
   audioplayers: ^3.0.1
+  firebase_core: ^2.6.1
+  cloud_firestore: ^4.4.2
 
 dev_dependencies:
   flutter_test:
