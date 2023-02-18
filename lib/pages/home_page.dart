@@ -239,23 +239,18 @@ class _HomePageState extends State<HomePage> {
               children: [
 
                 // English song list view
-               StreamBuilder<Object>(
-                 stream: null,
-                 builder: (context, snapshot) {
-                   return ListView.builder(
-                     itemCount: englishSongList.length,
-                     itemBuilder: (context, index){
-                       return SongTile(song: englishSongList[index],
-                         onTap: (){
-                           setState(() {
-                             currentSong = englishSongList[index];
-                           });
-                           playMusic(currentSong.songUrl);
-                         }
-                       );
-                     },
+               ListView.builder(
+                 itemCount: englishSongList.length,
+                 itemBuilder: (context, index){
+                   return SongTile(song: englishSongList[index],
+                     onTap: (){
+                       setState(() {
+                         currentSong = englishSongList[index];
+                       });
+                       playMusic(currentSong.songUrl);
+                     }
                    );
-                 }
+                 },
                ),
 
 
