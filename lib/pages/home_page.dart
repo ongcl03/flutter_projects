@@ -10,7 +10,6 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-
 class _HomePageState extends State<HomePage> {
 
   @override
@@ -30,7 +29,7 @@ class _HomePageState extends State<HomePage> {
       Uri.parse("https://api.openai.com/v1/chat/completions"),
       headers: {
         // The api key start with sk-...
-        "Authorization" : "Bearer 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",
+        "Authorization" : "Bearer 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",
         "Content-Type" : "application/json"
       },
       body: jsonEncode(body)
@@ -44,10 +43,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold();
   }
 }
-
-
-
-
 
 
 
